@@ -43,92 +43,21 @@
                     </div>
                 </li>
                 
-                <li class="nav-item dropdown">
-                    <a class="nav-link" data-toggle="dropdown" href="#">
-                        <i class="far fa-comments"></i>
-                        <span class="badge badge-danger navbar-badge">3</span>
-                    </a>
-                    <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
-                        <a href="#" class="dropdown-item">
-                            <div class="media">
-                                <img src="/assets/dist/img/user1-128x128.jpg" alt="User Avatar" class="img-size-50 mr-3 img-circle">
-                                <div class="media-body">
-                                    <h3 class="dropdown-item-title">
-                                        Brad Diesel
-                                        <span class="float-right text-sm text-danger"><i class="fas fa-star"></i></span>
-                                    </h3>
-                                    <p class="text-sm">Call me whenever you can...</p>
-                                    <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 4 Hours Ago</p>
-                                </div>
-                            </div>
-                        </a>
-                        <div class="dropdown-divider"></div>
-                        <a href="#" class="dropdown-item">
-                            <div class="media">
-                                <img src="/assets/dist/img/user8-128x128.jpg" alt="User Avatar" class="img-size-50 img-circle mr-3">
-                                <div class="media-body">
-                                    <h3 class="dropdown-item-title">
-                                        John Pierce
-                                        <span class="float-right text-sm text-muted"><i class="fas fa-star"></i></span>
-                                    </h3>
-                                    <p class="text-sm">I got your message bro</p>
-                                    <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 4 Hours Ago</p>
-                                </div>
-                            </div>
-                        </a>
-                        <div class="dropdown-divider"></div>
-                        <a href="#" class="dropdown-item">
-                            <div class="media">
-                                <img src="/assets/dist/img/user3-128x128.jpg" alt="User Avatar" class="img-size-50 img-circle mr-3">
-                                <div class="media-body">
-                                    <h3 class="dropdown-item-title">
-                                        Nora Silvester
-                                        <span class="float-right text-sm text-warning"><i class="fas fa-star"></i></span>
-                                    </h3>
-                                    <p class="text-sm">The subject goes here</p>
-                                    <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 4 Hours Ago</p>
-                                </div>
-                            </div>
-                        </a>
-                        <div class="dropdown-divider"></div>
-                        <a href="#" class="dropdown-item dropdown-footer">See All Messages</a>
-                    </div>
-                </li>
-                <li class="nav-item dropdown">
-                    <a class="nav-link" data-toggle="dropdown" href="#">
-                        <i class="far fa-bell"></i>
-                        <span class="badge badge-warning navbar-badge">15</span>
-                    </a>
-                    <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
-                        <span class="dropdown-header">15 Notifications</span>
-                        <div class="dropdown-divider"></div>
-                        <a href="#" class="dropdown-item">
-                            <i class="fas fa-envelope mr-2"></i> 4 new messages
-                            <span class="float-right text-muted text-sm">3 mins</span>
-                        </a>
-                        <div class="dropdown-divider"></div>
-                        <a href="#" class="dropdown-item">
-                            <i class="fas fa-users mr-2"></i> 8 friend requests
-                            <span class="float-right text-muted text-sm">12 hours</span>
-                        </a>
-                        <div class="dropdown-divider"></div>
-                        <a href="#" class="dropdown-item">
-                            <i class="fas fa-file mr-2"></i> 3 new reports
-                            <span class="float-right text-muted text-sm">2 days</span>
-                        </a>
-                        <div class="dropdown-divider"></div>
-                        <a href="#" class="dropdown-item dropdown-footer">See All Notifications</a>
-                    </div>
-                </li>
                 <li class="nav-item">
                     <a class="nav-link" data-widget="fullscreen" href="#" role="button">
                         <i class="fas fa-expand-arrows-alt"></i>
                     </a>
                 </li>
+                
+                <li class="nav-item">
+                    <a class="nav-link" href="/logout">
+                        <i class="fas fa-sign-out-alt"></i>
+                    </a>
+                </li>
             </ul>
         </nav>
         <aside class="main-sidebar sidebar-dark-primary elevation-4">
-            <a href="index3.html" class="brand-link text-center">
+            <a href="/" class="brand-link text-center">
                 <h1 class="brand-text font-weight-light">E-Planfun</h1>
             </a>
             
@@ -156,8 +85,15 @@
                 <nav class="mt-2">
                     <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
                         <li class="nav-item">
-                            <a href="#" class="nav-link">
+                            <a href="/" class="nav-link {{ request()->is('/') ? 'active' : '' }}">
                                 <i class="nav-icon fas fa-tachometer-alt"></i>
+                                <p>Dashboard</p>
+                            </a>
+                        </li>
+                        @can('super-user')
+                        <li class="nav-item {{ request()->is('dashboard/users*') || request()->is('dashboard/kode-rekenings*') || request()->is('dashboard/kegiatans*') || request()->is('dashboard/barangs*') || request()->is('dashboard/anggarans*') ? 'menu-open' : '' }}">
+                            <a href="#" class="nav-link {{ request()->is('dashboard/users*') || request()->is('dashboard/kode-rekenings*') || request()->is('dashboard/kegiatans*') || request()->is('dashboard/barangs*') || request()->is('dashboard/anggarans*') ? 'active' : '' }}">
+                                <i class="nav-icon fas fa-tasks"></i>
                                 <p>
                                     Master
                                     <i class="right fas fa-angle-left"></i>
@@ -195,10 +131,11 @@
                                     </a>
                                 </li>
                             </ul>
-                        </li>
+                        </li>                        
+                        @endcan
                         <li class="nav-item {{ request()->is('dashboard/usulans*') || request()->is('dashboard/verifikasi-usulan') ? 'menu-open' : '' }}">
                             <a href="#" class="nav-link {{ request()->is('dashboard/usulans*') || request()->is('dashboard/verifikasi-usulan') ? 'active' : '' }}">
-                                <i class="nav-icon fas fa-tachometer-alt"></i>
+                                <i class="nav-icon fas fa-lightbulb"></i>
                                 <p>
                                     Usulan
                                     <i class="right fas fa-angle-left"></i>
@@ -232,17 +169,13 @@
                         <li class="nav-item">
                             <a href="#" class="nav-link {{ request()->is('dashboard/laporan*') ? 'active' : '' }}">
                                 <i class="nav-icon fas fa-table"></i>
-                                <p>
-                                    Laporan
-                                </p>
+                                <p>Laporan</p>
                             </a>
                         </li>
                         <li class="nav-item">
                             <a href="#" class="nav-link {{ request()->is('dashboard/datadukung*') ? 'active' : '' }}">
-                                <i class="nav-icon fas fa-share"></i>
-                                <p>
-                                    Data Dukung
-                                </p>
+                                <i class="nav-icon fas fa-file-alt"></i>
+                                <p>Data Pendukung</p>
                             </a>
                         </li>
                     </ul>
@@ -250,7 +183,28 @@
             </div>
         </aside>
         
-        @yield('container')
+        <div class="content-wrapper">
+            <div class="content-header">
+                <div class="container-fluid">
+                    <div class="row mb-2">
+                        <div class="col-sm-6">
+                            <h1 class="m-0">{{ $title }}</h1>
+                        </div>
+                        <div class="col-sm-6">
+                            <ol class="breadcrumb float-sm-right">
+                                <li class="breadcrumb-item"><a href="#">Home</a></li>
+                                <li class="breadcrumb-item active">Dashboard</li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <section class="content">
+                <div class="container-fluid">
+                    @yield('container')
+                </div>
+            </section>
+        </div>
         
         <footer class="main-footer">
             <div class="float-right d-none d-sm-inline">
@@ -263,7 +217,7 @@
     <script src="/assets/plugins/jquery/jquery.min.js"></script>
     <script src="/assets/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script src="/assets/dist/js/adminlte.min.js"></script>
-
+    
     @yield('js')
 </body>
 </html>

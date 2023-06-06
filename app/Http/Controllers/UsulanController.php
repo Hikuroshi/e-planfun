@@ -6,6 +6,7 @@ use App\Models\KodeRekening;
 use App\Models\Usulan;
 use Cviebrock\EloquentSluggable\Services\SlugService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Storage;
 
 class UsulanController extends Controller
@@ -15,49 +16,9 @@ class UsulanController extends Controller
     */
     public function index()
     {
-        $verif = '';
-        foreach (Usulan::all() as $usulan) {
-            if ($usulan->status == 'subbag-tu-rungga' || $usulan->status == 'subag-humas-protokol') {
-                if ($usulan->status_verifikasi == 'Disetujui') {
-                    $verif = 'Sedang diusulkan ke KASUBAG PERENCANAAN';
-                } else {
-                    $verif = 'Ditolak oleh KASUBAG PERENCANAAN';
-                }
-            } elseif ($usulan->status == 'kasubag-perencanaan') {
-                if ($usulan->status_verifikasi == 'Disetujui') {
-                    $verif = 'Telah diverifikasi oleh ' . $usulan->aktor->nama . ' dan sedang diusulkan ke KEPALA KANTOR';
-                } else {
-                    $verif = 'Ditolak oleh KEPALA KANTOR';
-                }
-            } elseif ($usulan->status == 'kepala-kantor') {
-                if ($usulan->status_verifikasi == 'Disetujui') {
-                    $verif = 'Telah diverifikasi oleh ' . $usulan->aktor->nama . ' dan sedang diusulkan ke PEJABAT PEMBUAT KOMITMEN';
-                } else {
-                    $verif = 'Ditolak oleh PEJABAT PEMBUAT KOMITMEN';
-                }
-            } elseif ($usulan->status == 'pejabat-pembuat-komitmen') {
-                if ($usulan->status_verifikasi == 'Disetujui') {
-                    $verif = 'Telah diverifikasi oleh ' . $usulan->aktor->nama . ' dan sedang diusulkan ke KABAG PERENCANAAN';
-                } else {
-                    $verif = 'Ditolak oleh PEJABAT KABAG PERENCANAAN';
-                }
-            } elseif ($usulan->status == 'kabag-perencanaan') {
-                if ($usulan->status_verifikasi == 'Disetujui') {
-                    $verif = 'Telah diverifikasi oleh ' . $usulan->aktor->nama . ' dan sedang diusulkan ke SEKJEN';
-                } else {
-                    $verif = 'Ditolak oleh SEKJEN';
-                }
-            } elseif ($usulan->status == 'sekjen') {
-                if ($usulan->status_verifikasi == 'Disetujui') {
-                    $verif = 'Telah diverifikasi oleh ' . $usulan->aktor->nama;
-                }
-            }
-        }
-        
         return view('dashboard.usulan.index', [
             'title' => 'Daftar Usulan',
             'usulans' => Usulan::all(),
-            'verif' => $verif
         ]);
     }
     
@@ -66,6 +27,10 @@ class UsulanController extends Controller
     */
     public function create()
     {
+        if (! Gate::allows('operator')) {
+            abort(401);
+        }
+
         return view('dashboard.usulan.create', [
             'title' => 'Input Usulan',
             'kode_rekenings' => KodeRekening::all(),
@@ -98,48 +63,13 @@ class UsulanController extends Controller
     */
     public function show(Usulan $usulan)
     {
-        $verif = '';
-        
-        if ($usulan->status == 'subbag-tu-rungga' || $usulan->status == 'subag-humas-protokol') {
-            if ($usulan->status_verifikasi == 'Disetujui') {
-                $verif = 'Sedang diusulkan ke KASUBAG PERENCANAAN';
-            } else {
-                $verif = 'Ditolak oleh KASUBAG PERENCANAAN';
-            }
-        } elseif ($usulan->status == 'kasubag-perencanaan') {
-            if ($usulan->status_verifikasi == 'Disetujui') {
-                $verif = 'Telah diverifikasi oleh ' . $usulan->aktor->nama . ' dan sedang diusulkan ke KEPALA KANTOR';
-            } else {
-                $verif = 'Ditolak oleh KEPALA KANTOR';
-            }
-        } elseif ($usulan->status == 'kepala-kantor') {
-            if ($usulan->status_verifikasi == 'Disetujui') {
-                $verif = 'Telah diverifikasi oleh ' . $usulan->aktor->nama . ' dan sedang diusulkan ke PEJABAT PEMBUAT KOMITMEN';
-            } else {
-                $verif = 'Ditolak oleh PEJABAT PEMBUAT KOMITMEN';
-            }
-        } elseif ($usulan->status == 'pejabat-pembuat-komitmen') {
-            if ($usulan->status_verifikasi == 'Disetujui') {
-                $verif = 'Telah diverifikasi oleh ' . $usulan->aktor->nama . ' dan sedang diusulkan ke KABAG PERENCANAAN';
-            } else {
-                $verif = 'Ditolak oleh PEJABAT KABAG PERENCANAAN';
-            }
-        } elseif ($usulan->status == 'kabag-perencanaan') {
-            if ($usulan->status_verifikasi == 'Disetujui') {
-                $verif = 'Telah diverifikasi oleh ' . $usulan->aktor->nama . ' dan sedang diusulkan ke SEKJEN';
-            } else {
-                $verif = 'Ditolak oleh SEKJEN';
-            }
-        } elseif ($usulan->status == 'sekjen') {
-            if ($usulan->status_verifikasi == 'Disetujui') {
-                $verif = 'Telah diverifikasi oleh ' . $usulan->aktor->nama;
-            }
+        if (! Gate::allows('operator')) {
+            abort(401);
         }
-        
+
         return view('dashboard.usulan.show', [
             'title' => 'Rincian Usulan',
             'usulan' => $usulan,
-            'verif' => $verif
         ]);
     }
     
@@ -148,6 +78,10 @@ class UsulanController extends Controller
     */
     public function edit(Usulan $usulan)
     {
+        if (! Gate::allows('operator')) {
+            abort(401);
+        }
+
         return view('dashboard.usulan.edit', [
             'title' => 'Perbarui Usulan',
             'usulan' => $usulan,

@@ -48,14 +48,19 @@ class AppServiceProvider extends ServiceProvider
 
         Gate::define('operator', function(User $user){
             return $user->role->slug == 'subbag-tu-rungga' ||
-                    $user->role->slug == 'subag-humas-protokol';
+                    $user->role->slug == 'subag-humas-protokol' ||
+                    $user->role->slug == 'super-user';
         });
         Gate::define('verifikator', function(User $user){
             return $user->role->slug == 'kasubag-perencanaan' ||
                     $user->role->slug == 'kepala-kantor' ||
                     $user->role->slug == 'pejabat-pembuat-komitmen' ||
                     $user->role->slug == 'kabag-perencanaan' ||
-                    $user->role->slug == 'sekjen';
+                    $user->role->slug == 'sekjen' ||
+                    $user->role->slug == 'super-user';
+        });
+        Gate::define('super-user', function(User $user){
+            return $user->role->slug == 'super-user';
         });
     }
 }

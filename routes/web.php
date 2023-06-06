@@ -21,24 +21,28 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
-
 Route::resource('/dashboard/usulans', UsulanController::class)->middleware('auth');
-Route::resource('/dashboard/users', UserController::class)->middleware('auth');
-Route::resource('/dashboard/kode-rekenings', KodeRekeningController::class)->middleware('auth');
-Route::resource('/dashboard/kegiatans', KegiatanController::class)->middleware('auth');
-Route::resource('/dashboard/barangs', BarangController::class)->middleware('auth');
-Route::resource('/dashboard/anggarans', AnggaranController::class)->middleware('auth');
 
-Route::controller(UserController::class)->group(function () {
-    Route::get('/dashboard/users/{user:username}/edit-password', 'editPassword')->middleware('auth');
-    Route::put('/dashboard/users/{user:username}/edit-password', 'updatePassword');
+Route::middleware('can:super-user')->group(function () {
+    Route::resource('/dashboard/users', UserController::class)->middleware('auth');
+    Route::resource('/dashboard/kode-rekenings', KodeRekeningController::class)->middleware('auth');
+    Route::resource('/dashboard/kegiatans', KegiatanController::class)->middleware('auth');
+    Route::resource('/dashboard/barangs', BarangController::class)->middleware('auth');
+    Route::resource('/dashboard/anggarans', AnggaranController::class)->middleware('auth');
 });
 
-Route::controller(VerifikasiUsulanController::class)->group(function(){
-    Route::middleware('can:verifikator')->group(function(){
+Route::middleware('can:super-user')->group(function () {
+    Route::controller(UserController::class)->group(function () {
+        Route::get('/dashboard/users/{user:username}/edit-password', 'editPassword')->middleware('auth');
+        Route::put('/dashboard/users/{user:username}/edit-password', 'updatePassword');
+    });
+});
+
+Route::middleware('can:verifikator')->group(function(){
+    Route::controller(VerifikasiUsulanController::class)->group(function(){
         Route::get('/dashboard/verifikasi-usulan', 'index')->middleware('auth');
         Route::get('/dashboard/verifikasi-usulan/{usulan:slug}', 'edit')->middleware('auth');
-        Route::put('/dashboard/verifikasi-usulan/{usulan:slug}', 'update')->middleware('auth');
+        Route::put('/dashboard/verifikasi-usulan/{usulan:slug}', 'update');
     });
 });
 

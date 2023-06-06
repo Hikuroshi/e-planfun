@@ -8,93 +8,71 @@
 
 @section('container')
 
-<div class="content-wrapper">
-    <section class="content-header">
-        <div class="container-fluid">
-            <div class="row mb-2">
-                <div class="col-sm-6">
-                    <h1>DataTables</h1>
-                </div>
-                <div class="col-sm-6">
-                    <ol class="breadcrumb float-sm-right">
-                        <li class="breadcrumb-item"><a href="#">Home</a></li>
-                        <li class="breadcrumb-item active">DataTables</li>
-                    </ol>
-                </div>
-            </div>
-        </div>
-    </section>
-    
-    <section class="content">
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-12">
-                    <div class="card">
-                        <div class="card-header">
-                            <div class="row align-items-center">
-                                <div class="col-6">
-                                    <h3 class="card-title">DataTable with default features</h3>
-                                </div>
-                                <div class="col-6 text-right">
-                                    <a class="btn btn-success btn-sm" href="/dashboard/kode-rekenings/create">
-                                        <i class="fas fa-plus"></i>
-                                        Tambah Kode Rekening
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card-body">
-                            <table id="example1" class="table table-bordered table-striped">
-                                <thead>
-                                    <tr>
-                                        <th style="width: 20px">No</th>
-                                        <th>Kode</th>
-                                        <th>Uraian</th>
-                                        <th>Kegiatan</th>
-                                        <th>Barang</th>
-                                        <th>Anggaran</th>
-                                        <th style="width: 200px">Aksi</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach ($kodeRekenings as $kodeRekening)
-                                    <tr>
-                                        <td>{{ $loop->iteration }}</td>
-                                        <td>{{ $kodeRekening->kode}}</td>
-                                        <td>{{ $kodeRekening->uraian }}</td>
-                                        <td>{{ $kodeRekening->kegiatan->nama }}</td>
-                                        <td>
-                                            <ul>
-                                                @foreach ($kodeRekening->barangs as $barang)
-                                                <li>{{ $barang->nama }}</li>
-                                                @endforeach
-                                            </ul>
-                                        </td>
-                                        <td>{{ $kodeRekening->anggaran->jumlah }}</td>
-                                        <td class="project-actions text-right">
-                                            <a class="btn btn-info btn-sm" href="/dashboard/kode-rekenings/{{ $kodeRekening->slug }}/edit">
-                                                <i class="fas fa-pencil-alt"></i>
-                                                Edit
-                                            </a>
-                                            <form action="/dashboard/kode-rekenings/{{ $kodeRekening->slug }}" method="post" class="d-inline">
-                                                @method('delete')
-                                                @csrf
-                                                <button class="btn btn-danger btn-sm" onclick="confirm('Apakah yakin ingin menghapus?')">
-                                                    <i class="fas fa-trash"></i>
-                                                    Delete
-                                                </button>
-                                            </form>
-                                        </td>
-                                    </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
-                        </div>
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <div class="row align-items-center">
+                    <div class="col-6">
+                        <h3 class="card-title">DataTable with default features</h3>
+                    </div>
+                    <div class="col-6 text-right">
+                        <a class="btn btn-success btn-sm" href="/dashboard/kode-rekenings/create">
+                            <i class="fas fa-plus"></i>
+                            Tambah Kode Rekening
+                        </a>
                     </div>
                 </div>
             </div>
+            <div class="card-body">
+                <table id="example1" class="table table-bordered table-striped">
+                    <thead>
+                        <tr>
+                            <th style="width: 20px">No</th>
+                            <th>Kode</th>
+                            <th>Uraian</th>
+                            <th>Kegiatan</th>
+                            <th>Barang</th>
+                            <th>Anggaran</th>
+                            <th style="width: 200px">Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($kodeRekenings as $kodeRekening)
+                        <tr>
+                            <td>{{ $loop->iteration }}</td>
+                            <td>{{ $kodeRekening->kode}}</td>
+                            <td>{{ $kodeRekening->uraian }}</td>
+                            <td>{{ $kodeRekening->kegiatan->nama }}</td>
+                            <td>
+                                <ul>
+                                    @foreach ($kodeRekening->barangs as $barang)
+                                    <li>{{ $barang->nama }}</li>
+                                    @endforeach
+                                </ul>
+                            </td>
+                            <td>{{ $kodeRekening->anggaran->jumlah }}</td>
+                            <td class="project-actions text-right">
+                                <a class="btn btn-info btn-sm" href="/dashboard/kode-rekenings/{{ $kodeRekening->slug }}/edit">
+                                    <i class="fas fa-pencil-alt"></i>
+                                    Edit
+                                </a>
+                                <form action="/dashboard/kode-rekenings/{{ $kodeRekening->slug }}" method="post" class="d-inline">
+                                    @method('delete')
+                                    @csrf
+                                    <button class="btn btn-danger btn-sm" onclick="confirm('Apakah yakin ingin menghapus?')">
+                                        <i class="fas fa-trash"></i>
+                                        Delete
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
         </div>
-    </section>
+    </div>
 </div>
 
 @endsection
@@ -114,11 +92,11 @@
 <script src="/assets/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
 
 <script>
-        $(function () {
-            $("#example1").DataTable({
-                "responsive": true, "lengthChange": false, "autoWidth": false,
-                "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
-            }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
-        });
+    $(function () {
+        $("#example1").DataTable({
+            "responsive": true, "lengthChange": false, "autoWidth": false,
+            "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+        }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+    });
 </script>
 @endsection

@@ -50,6 +50,11 @@ class DatabaseSeeder extends Seeder
             'slug' => 'sekjen',
             'aksi' => 'Pengesahan Usulan'
         ]);
+        Role::create([
+            'nama' => 'Super User',
+            'slug' => 'super-user',
+            'aksi' => 'Semua Hak Akses'
+        ]);
 
         User::create([
             'nama' => 'Admin',
@@ -92,6 +97,12 @@ class DatabaseSeeder extends Seeder
             'username' => 'verifikator5',
             'password' => bcrypt('admin'),
             'role_id' => 7
+        ]);
+        User::create([
+            'nama' => 'Admin',
+            'username' => 'superuser',
+            'password' => bcrypt('admin'),
+            'role_id' => 8
         ]);
     }
 }
