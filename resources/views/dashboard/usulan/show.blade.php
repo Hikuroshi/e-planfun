@@ -1,5 +1,9 @@
 @extends('layouts.main')
 
+@section('css')
+<link rel="stylesheet" href="/assets/plugins/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css">
+@endsection
+
 @section('container')
 
 <div class="row">
@@ -70,7 +74,7 @@
                 <form action="/dashboard/usulans/{{ $usulan->slug }}" method="post" class="d-inline">
                     @method('delete')
                     @csrf
-                    <button class="btn btn-danger btn-sm" onclick="confirm('Apakah yakin ingin menghapus?')">
+                    <button class="btn btn-danger btn-sm swalDelete" data-title="{{ $usulan->kodeRekening->uraian }}">
                         <i class="fas fa-trash"></i>
                         Delete
                     </button>
@@ -89,4 +93,32 @@
     </div>
 </div>
 
+@endsection
+
+@section('js')
+<script src="/assets/plugins/sweetalert2/sweetalert2.min.js"></script>
+
+<script>
+    $(document).ready(function() {
+        $('.swalDelete').click(function(e) {
+            e.preventDefault();
+            var title = $(this).data('title');
+            
+            Swal.fire({
+                title: 'Hapus ' + title + '?',
+                html: "Apakah kamu yakin ingin menghapus <b>" + title + "</b>? Data yang sudah dihapus tidak bisa dikembalikan!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Ya, Hapus',
+                cancelButtonText: 'Batal'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $(this).closest('form').submit();
+                }
+            });
+        });
+    });
+</script>
 @endsection

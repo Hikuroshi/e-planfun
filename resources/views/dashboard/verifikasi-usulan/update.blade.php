@@ -1,5 +1,9 @@
 @extends('layouts.main')
 
+@section('css')
+<link rel="stylesheet" href="/assets/plugins/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css">
+@endsection
+
 @section('container')
 
 <div class="row">
@@ -68,14 +72,19 @@
                     
                     <div class="form-group">
                         <label for="keterangan_verifikasi">Keterangan Verifikasi</label>
-                        <textarea class="form-control" rows="3" placeholder="Keterangan verifikasi" style="height: 97px;" id="keterangan_verifikasi" name="keterangan_verifikasi"></textarea>
+                        <textarea class="form-control @error('keterangan_verifikasi') is-invalid @enderror" rows="3" placeholder="Keterangan verifikasi" style="height: 97px;" id="keterangan_verifikasi" name="keterangan_verifikasi" required>{{ old('keterangan') }}</textarea>
+                        @error('keterangan_verifikasi')
+                        <div class="invalid-feedback">
+                            {{ $message }}
+                        </div>
+                        @enderror
                     </div>
                     
-                    <button class="btn btn-success btn-sm" type="submit" name="status_verifikasi" value="Disetujui" onclick="confirm('Apakah yakin ingin menyetujui?')">
+                    <button class="btn btn-success btn-sm swalSetuju" name="status_verifikasi" value="Disetujui" data-title="{{ $usulan->kodeRekening->uraian }}">
                         <i class="fas fa-check"></i>
                         Setuju
                     </button>
-                    <button class="btn btn-danger btn-sm" type="submit" name="status_verifikasi" value="Ditolak" onclick="confirm('Apakah yakin ingin menolak?')">
+                    <button class="btn btn-danger btn-sm swalTolak" name="status_verifikasi" value="Ditolak" data-title="{{ $usulan->kodeRekening->uraian }}">
                         <i class="fas fa-times"></i>
                         Tolak
                     </button>
@@ -94,4 +103,51 @@
     </div>
 </div>
 
+@endsection
+
+@section('js')
+<script src="/assets/plugins/sweetalert2/sweetalert2.min.js"></script>
+
+<script>
+    $(document).ready(function() {
+        $('.swalSetuju').click(function(e) {
+            e.preventDefault();
+            var title = $(this).data('title');
+            
+            Swal.fire({
+                title: 'Setuju dengan ' + title + '?',
+                html: "Apakah kamu yakin setuju dengan <b>" + title + "</b>?",
+                icon: 'success',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Ya, Setuju',
+                cancelButtonText: 'Batal'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $(this).closest('form').submit();
+                }
+            });
+        });
+        $('.swalTolak').click(function(e) {
+            e.preventDefault();
+            var title = $(this).data('title');
+            
+            Swal.fire({
+                title: 'Tolak ' + title + '?',
+                html: "Apakah kamu yakin ingin menolak <b>" + title + "</b>?",
+                icon: 'error',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Ya, Tolak',
+                cancelButtonText: 'Batal'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $(this).closest('form').submit();
+                }
+            });
+        });
+    });
+</script>
 @endsection

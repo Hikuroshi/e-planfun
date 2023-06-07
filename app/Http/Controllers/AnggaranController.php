@@ -51,10 +51,7 @@ class AnggaranController extends Controller
      */
     public function show(Anggaran $anggaran)
     {
-        return view('dashboard.anggaran.show', [
-            'title' => 'Rincian Anggaran',
-            'anggaran' => $anggaran,
-        ]);
+        return redirect('/dashboard/anggarans');
     }
 
     /**

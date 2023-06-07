@@ -65,10 +65,7 @@ class KodeRekeningController extends Controller
      */
     public function show(KodeRekening $kodeRekening)
     {
-        return view('dashboard.kode-rekening.show', [
-            'title' => 'Rincian Kode Rekening',
-            'kodeRekening' => $kodeRekening,
-        ]);
+        return redirect('/dashboard/kode-rekenings');
     }
 
     /**

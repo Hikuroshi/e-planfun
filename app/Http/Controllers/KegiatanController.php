@@ -63,10 +63,7 @@ class KegiatanController extends Controller
      */
     public function edit(Kegiatan $kegiatan)
     {
-        return view('dashboard.kegiatan.edit', [
-            'title' => 'Perbarui Kegiatan',
-            'kegiatan' => $kegiatan,
-        ]);
+        return redirect('/dashboard/kegiatans');
     }
 
     /**

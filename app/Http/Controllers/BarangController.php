@@ -52,10 +52,7 @@ class BarangController extends Controller
      */
     public function show(Barang $barang)
     {
-        return view('dashboard.barang.show', [
-            'title' => 'Rincian Barang',
-            'barang' => $barang,
-        ]);
+        return redirect('/dashboard/barangs');
     }
 
     /**

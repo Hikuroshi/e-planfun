@@ -192,8 +192,22 @@
                         </div>
                         <div class="col-sm-6">
                             <ol class="breadcrumb float-sm-right">
-                                <li class="breadcrumb-item"><a href="#">Home</a></li>
-                                <li class="breadcrumb-item active">Dashboard</li>
+                                <li class="breadcrumb-item">
+                                    @if (count(request()->segments()) === 0)
+                                    Home
+                                    @else
+                                    <a href="{{ url('/') }}">Home</a>
+                                    @endif
+                                </li>
+                                @foreach (request()->segments() as $key => $segment)
+                                <li class="breadcrumb-item {{ ($key === count(request()->segments()) - 1) ? 'active' : '' }}">
+                                    @if ($key === count(request()->segments()) - 1)
+                                    {{ ucfirst($segment) }}
+                                    @else
+                                    <a href="{{ url(implode('/', array_slice(request()->segments(), 0, $key + 1))) }}">{{ ucfirst($segment) }}</a>
+                                    @endif
+                                </li>
+                                @endforeach
                             </ol>
                         </div>
                     </div>
@@ -217,7 +231,6 @@
     <script src="/assets/plugins/jquery/jquery.min.js"></script>
     <script src="/assets/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script src="/assets/dist/js/adminlte.min.js"></script>
-    
     @yield('js')
 </body>
 </html>
